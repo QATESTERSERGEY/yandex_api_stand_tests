@@ -1,0 +1,103 @@
+//ЗАДАНИЕ 2
+//Прежде чем переходить к заданию, удали всё лишнее из файла sender_stand_request.py — оставь только импорты и функцию.
+Проверь в документации, какой запрос нужен для получения логов Utils → Логи основного сервера. Скриншот есть ниже.
+В файл configuration.py добавь переменную LOG_MAIN_PATH = "/api/logs/main/".
+В файле sender_stand_request.py напиши функцию get_logs(), которая возращает ответ с логами по умолчанию.
+Выведи на экран код и заголовки ответа.
+//Объяви функцию def get_logs():, в теле укажи ключевое слово return, после этого напиши название пакета requests и вызови функцию get(). В качестве аргумента передай конкатенацию двух строк: URL + путь к логам: configuration.URL_SERVICE + configuration.LOG_MAIN_PATH.
+Чтобы сохранить ответ на запрос, создай переменную response, в нее сохрани результат вызова функции get_logs() с помощью оператора присваивания =.
+С помощью функции print() выведи на экран код ответа response.status_code и заголовки ответа response.headers.
+
+import configuration
+import requests
+def get_logs():
+    return requests.get(configuration.URL_SERVICE + configuration.LOG_MAIN_PATH,params={"count":20})
+
+response = get_logs()
+print(response.status_code)
+print(response.headers)
+
+//ЗАДАНИЕ 4
+//Добавь в запрос логов параметр params={"count":20}, запусти и проверь, изменился ли код ответа.
+//
+import configuration
+import requests
+def get_logs():
+    return requests.get(configuration.URL_SERVICE + configuration.LOG_MAIN_PATH,params={"count":20})
+
+response = get_logs()
+print(response.status_code)
+print(response.headers)
+
+//Задание 5
+Прежде чем переходить к заданию, удали всё лишнее из файла sender_stand_request.py — оставь только импорты и функции.
+Проверь в документации, какой запрос нужен, чтобы получить информацию из таблицы базы данных: Utils → Получение информации из таблицы. Скриншот есть ниже.
+В файл configuration.py добавь переменную USERS_TABLE_PATH = "/api/db/resources/user_model.csv".
+В файле sender_stand_request.py напиши функцию get_users_table(), которая вернет ответ с данными из таблицы user.
+Выведи на экран код ответа.
+
+import configuration
+import requests
+def get_users_table():
+    return requests.get(configuration.URL_SERVICE + configuration.USERS_TABLE_PATH)
+
+response = get_users_table()
+print(response.status_code)
+
+//Библиотека requests: POST-запрос
+
+//В файл configuration.py добавь путь:
+CREATE_USER_PATH = "/api/v1/users/"
+Для данных запроса создай отдельный файл **data.py. В нем будут лежать заголовки и тело запроса.
+headers = {
+    "Content-Type": "application/json"
+}
+
+user_body = {
+    "firstName": "Анатолий",
+    "phone": "+79995553322",
+    "address": "г. Москва, ул. Пушкина, д. 10"
+}
+В файл sender_stand_request.py импортируй файл data. Импорты будут выглядеть так:
+import configuration
+import requests
+import data
+Чтобы отправить запрос с помощью библиотеки requests, нужно написать название библиотеки и обратиться к функции POST(). При обращении к функции нужно передать полный путь и тело запроса. Дополнительно можно указать заголовки.
+Назначение атрибута	Атрибут	Пример использования
+Словарь тела запроса в формате json	json	json={ "firstName": "Анатолий", "phone": "+79995553322", "address": "г. Москва, ул. Пушкина, д. 10"}
+Словарь заголовков запроса	headers	headers={"Content-Type": "application/json"}
+
+def post_new_user(body):
+    return requests.post(configuration.URL_SERVICE + configuration.CREATE_USER_PATH,  # подставляем полный url
+                         json=body,  # тут тело
+                         headers=data.headers)  # а здесь заголовки
+
+response = post_new_user(data.user_body);
+print(response.status_code)
+//Задание 1
+Допиши код, чтобы тело ответа было выведено на экран в формате словаря.
+Воспользуйся функцией json(), чтобы получить тело ответа.
+//Задание 2
+Удали всё лишнее из файла sender_stand_request.py — оставь только импорты и функции.
+Напиши POST-запрос на поиск наборов по продуктам Main.Products → Поиск наборов по продуктам.
+В файле data.py создай словарь product_ids:
+product_ids = {
+    "ids": [1, 2, 3]
+}
+В файле configuration.py создай переменную пути: PRODUCTS_KITS_PATH = "/api/v1/products/kits/".
+В файле sender_stand_request.py напиши функцию post_products_kits(), которая на вход получает список id продуктов products_ids и возращает ответ с наборами.
+Выведи на экран код и тело ответа функции post_products_kits() с переменной data.product_ids.
+
+import configuration
+import requests
+import data
+
+
+def post_products_kits(products_ids):
+    return requests.post(configuration.URL_SERVICE + configuration.PRODUCTS_KITS_PATH, json=products_ids,
+                         headers=data.headers)
+
+
+response = post_products_kits(data.product_ids);
+print(response.status_code)
+print(response.json())
